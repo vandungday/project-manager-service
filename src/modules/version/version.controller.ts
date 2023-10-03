@@ -5,11 +5,18 @@ import { UpdateVersionDto } from './dto/update-version.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VERSION_FILE_NAME, VERSION_FILE_PATH, VERSION_FILE_SIZE, VERSION_FILE_TYPE } from '@/common/constants/verson.constant';
 import { setUploadOptions } from '@/common/config/multer.config';
+import { ApiOkResponse, ApiTags, } from '@nestjs/swagger';
+import { GetVersions } from './swagger';
 
 @Controller('api/v1/versions')
+@ApiTags('versions')
 export class VersionController {
   constructor(private readonly versionService: VersionService) { }
 
+  @ApiOkResponse({
+    description: 'OK - create new version success',
+    type: CreateVersionDto,
+  })
   @Post()
   @UseInterceptors(
     FileInterceptor(
@@ -25,6 +32,10 @@ export class VersionController {
     return this.versionService.create(createProjectDto, file.path);
   }
 
+  @ApiOkResponse({
+    description: 'OK - get all versions success',
+    type: GetVersions,
+  })
   @Get()
   findAll(@Query() search?: any) {
     return this.versionService.findAll(search);

@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { EnvironmentService } from './environment.service';
 import { CreateEnvironmentDto } from './dto/create-environment.dto';
 import { UpdateEnvironmentDto } from './dto/update-environment.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('api/v1/enviroments')
+@ApiTags('enviroments')
 export class EnvironmentController {
   constructor(private readonly environmentService: EnvironmentService) { }
 
