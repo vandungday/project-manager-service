@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   /**
    * Global Pipes
@@ -12,10 +13,13 @@ async function bootstrap() {
   const validationPipe = new ValidationPipe({
     transform: true,
     whitelist: true,
-    errorHttpStatusCode: HttpStatus.BAD_REQUEST,
-    stopAtFirstError: true,
+    forbidNonWhitelisted: true,
   });
   app.useGlobalPipes(validationPipe);
+
+  app.useStaticAssets('uploads', {
+    prefix: '/uploads',
+  });
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT');
