@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ProjectModule } from './modules/project/project.module';
 import { VersionModule } from './modules/version/version.module';
 import { MulterConfigModule } from './modules/multer/multer.module';
+import { EnvironmentModule } from './modules/environment/environment.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -21,6 +22,7 @@ import { MulterConfigModule } from './modules/multer/multer.module';
     MulterConfigModule,
     ProjectModule,
     VersionModule,
+    EnvironmentModule,
   ],
 })
 export class AppModule { }

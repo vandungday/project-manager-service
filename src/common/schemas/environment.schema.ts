@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { BaseSchema } from './base.schema';
-import { Stream } from 'stream';
+import { EnvironmentType } from '../enum';
 
 @Schema({
     timestamps: true
@@ -16,8 +16,8 @@ export class Environment extends BaseSchema {
     @Prop({ type: String })
     description: string;
 
-    @Prop({ type: String, enum: ['UAT', 'develop', 'staging', 'production'] })
-    type: string;
+    @Prop({ type: String, enum: EnvironmentType })
+    type: EnvironmentType;
 
     @Prop({ type: Boolean, default: true })
     isActive: Boolean;

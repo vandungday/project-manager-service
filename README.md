@@ -1,4 +1,3 @@
-
 ## Installation
 
 ```bash
@@ -12,7 +11,7 @@ $ npm install
 $ npm run start
 
 # watch mode
-$ npm run start:dev
+$ npm run dev
 
 # production mode
 $ npm run start:prod
@@ -30,4 +29,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
