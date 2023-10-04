@@ -4,10 +4,13 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import axios from 'axios';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // const { data: response } = await axios.get("http://localhost:3001/api/v1/users");
+  // console.log("🚀 ~ file: main.ts:13 ~ bootstrap ~ data:", response)
   /**
    * Global Pipes
    */

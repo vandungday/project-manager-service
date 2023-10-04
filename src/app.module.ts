@@ -6,6 +6,7 @@ import { ProjectModule } from './modules/project/project.module';
 import { VersionModule } from './modules/version/version.module';
 import { MulterConfigModule } from './modules/multer/multer.module';
 import { EnvironmentModule } from './modules/environment/environment.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -23,6 +24,7 @@ import { EnvironmentModule } from './modules/environment/environment.module';
     ProjectModule,
     VersionModule,
     EnvironmentModule,
+    AuthModule,
   ],
 })
 export class AppModule { }
