@@ -3,14 +3,14 @@ import { Observable } from 'rxjs';
 import { JwtGuard } from './jwt.guard';
 import { Reflector } from '@nestjs/core';
 import { AUTH_TYPE_KEY } from '@/common/constants/auth.constant';
-import { AuthType } from '@/common/enums/auth.enum';
+import { AuthType } from '@/common/enums';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtGuard: JwtGuard,
     private readonly reflector: Reflector,
-  ) {}
+  ) { }
 
   canActivate(
     context: ExecutionContext,

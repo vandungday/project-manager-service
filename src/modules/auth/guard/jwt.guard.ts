@@ -18,7 +18,7 @@ export class JwtGuard implements CanActivate {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();

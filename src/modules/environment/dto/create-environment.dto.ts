@@ -1,4 +1,4 @@
-import { EnvironmentType } from "@/common/enum";
+import { EnvironmentType } from "@/common/enums";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 

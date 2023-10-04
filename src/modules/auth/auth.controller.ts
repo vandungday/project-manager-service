@@ -6,8 +6,8 @@ import { SignInDto } from './dto/sign-in.dto';
 import { UserWithoutPassword } from '@/common/types';
 import { User } from '../user/entities/user.entity';
 import { AuthUser } from '@/common/decorator/user.decorator';
-import { AuthType } from '@/common/enums/auth.enum';
 import { Auth } from '@/common/decorator/auth.decorator';
+import { AuthType } from '@/common/enums';
 
 @Controller('/api/v1/auth')
 export class AuthController {

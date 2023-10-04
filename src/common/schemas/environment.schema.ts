@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { BaseSchema } from './base.schema';
-import { EnvironmentType } from '../enum';
+import { EnvironmentType } from '../enums';
 
 @Schema({
     timestamps: true
