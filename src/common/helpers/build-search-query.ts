@@ -9,6 +9,7 @@ export const buildSearchQuery = (search: Record<string, any>) => {
 
     const query = {} as Record<string, any>;
     const conditions = Object.entries(arg);
+    /* using with mongodb */
     conditions.map(([key, value]) => {
         if (!["time_from", "time_to"].includes(key))
             query[key] = { $regex: value, $options: "i" };
@@ -28,6 +29,7 @@ export const buildSearchQuery = (search: Record<string, any>) => {
     if (time_to) query["created_at"] = { $lte: vTimeTo };
     if (time_from && time_to)
         query["created_at"] = { $gte: vTimeFrom, $lte: vTimeTo };
+    /* using with mongodb */
 
     return {
         query,

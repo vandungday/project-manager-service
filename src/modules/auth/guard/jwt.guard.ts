@@ -8,24 +8,17 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { REQUEST_USER_KEY } from '@/common/constants/auth.constant';
-import axios from 'axios';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '@/modules/user/entities/user.entity';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) { }
-
-  fetchData(token: string) {
-    return axios.create({
-      baseURL: 'http://localhost:3001/api/v1',
-      headers: {
-        'X-Custom-Header': 'foobar',
-        'Authorization': `Bearer ${token}`,
-      }
-    });
-  }
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -41,14 +34,11 @@ export class JwtGuard implements CanActivate {
       });
 
       const { userId } = payload;
-      const { data: response } = await this.fetchData(token).get(`/users/${userId}`);
-      const { id } = response;
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+      });
 
-      if (id !== userId) {
-        throw new UnauthorizedException();
-      }
-
-      request[REQUEST_USER_KEY] = response;
+      request[REQUEST_USER_KEY] = user;
     } catch {
       throw new UnauthorizedException();
     }
