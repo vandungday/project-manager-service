@@ -4,14 +4,14 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { AuthResponse } from './auth.interface';
 import { SignInDto } from './dto/sign-in.dto';
 import { UserWithoutPassword } from '@/common/types';
-import { User } from '../user/entities/user.entity';
 import { AuthUser } from '@/common/decorator/user.decorator';
 import { Auth } from '@/common/decorator/auth.decorator';
 import { AuthType } from '@/common/enums';
+import { User } from '@/common/schemas';
 
 @Controller('/api/v1/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('sign-up')
   @Auth(AuthType.Public)

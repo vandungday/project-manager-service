@@ -1,20 +1,34 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
 import { buildSearchQuery } from 'src/common/helpers/build-search-query';
 import { exclude } from 'src/common/helpers/exclude';
+import { User } from '@/common/schemas';
+import { UserRepository } from '@/common/repository/user.repository';
+import * as bcrypt from 'bcrypt';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) { }
+  constructor(private readonly userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto) {
-    return this.userRepository.save(createUserDto);
+    const { email, password } = createUserDto;
+
+    const isExisted = await this.userRepository.findOne({ email });
+    if (isExisted) throw new BadRequestException('Email is already existed');
+
+    const saltOrRounds = 7;
+    const hashPassword = await bcrypt.hash(password, saltOrRounds);
+
+    return this.userRepository.create({
+      ...createUserDto,
+      password: hashPassword,
+    });
   }
 
   async findAll(search?: any) {
@@ -23,10 +37,9 @@ export class UserService {
       options: { page, limit, skip },
     } = buildSearchQuery(search);
 
-    const [users] = await this.userRepository.findAndCount({
-      where: query,
-      take: limit,
+    const users = await this.userRepository.find(query, {
       skip,
+      limit,
     });
 
     const usersWithoutPassword = users.map((user) => {
@@ -36,32 +49,36 @@ export class UserService {
     const total = users.length;
     const pages = Math.ceil(total / limit) || 1;
 
-    return {
-      users: usersWithoutPassword,
-      total,
-      page,
-      pages,
-      limit,
-    };
+    return { users: usersWithoutPassword, total, page, pages, limit };
   }
 
-  async findOne(id: number) {
-    const user = await this.userRepository.findOne({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: Types.ObjectId) {
+    const user = await this.userRepository.findOne({ _id: id });
 
     if (!user) throw new NotFoundException('User not found');
 
     return exclude<User, 'password'>(user, ['password']);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update(id, updateUserDto);
+  update(id: Types.ObjectId, updateUserDto: UpdateUserDto) {
+    const user = this.userRepository.findOne({ _id: id });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.findOneAndUpdate({ _id: id }, updateUserDto);
   }
 
-  remove(id: number) {
-    return this.userRepository.delete(id);
+  remove(id: Types.ObjectId) {
+    const user = this.userRepository.findOne({ _id: id });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.userRepository.findOneAndDelete({
+      _id: id,
+    });
   }
 }

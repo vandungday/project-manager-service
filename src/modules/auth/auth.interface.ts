@@ -1,8 +1,10 @@
+import { Schema } from 'mongoose';
+
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
 }
 
 export interface SignTokenPayload {
-  userId: number;
+  userId: Schema.Types.ObjectId;
 }

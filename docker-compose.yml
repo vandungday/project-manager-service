@@ -12,15 +12,3 @@ services:
       - '27017:27017'
     volumes:
       - ~/apps/mongo:/data/db
-  postgres:
-    container_name: postgres
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=vti
-    ports:
-      - 5432:5432
-    volumes:
-      - ~/apps/postgres:/data/db

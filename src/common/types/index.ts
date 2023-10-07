@@ -1,3 +1,3 @@
-import { User } from 'src/modules/user/entities/user.entity';
+import { User } from '../schemas';
 
 export type UserWithoutPassword = Omit<User, 'password'>;

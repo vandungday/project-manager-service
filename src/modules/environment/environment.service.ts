@@ -6,16 +6,21 @@ import { buildSearchQuery } from '@/common/helpers/build-search-query';
 
 @Injectable()
 export class EnvironmentService {
-
-  constructor(private readonly environmentRepository: EnvironmentRepository) { }
+  constructor(private readonly environmentRepository: EnvironmentRepository) {}
 
   create(createEnvironmentDto: CreateEnvironmentDto) {
     return this.environmentRepository.create(createEnvironmentDto);
   }
 
   async findAll(search?: any) {
-    const { query, options: { page, limit, skip } } = buildSearchQuery(search);
-    const projects = await this.environmentRepository.find(query, { skip, limit });
+    const {
+      query,
+      options: { page, limit, skip },
+    } = buildSearchQuery(search);
+    const projects = await this.environmentRepository.find(query, {
+      skip,
+      limit,
+    });
     const total = projects.length;
     const pages = Math.ceil(total / limit) || 1;
 
@@ -36,11 +41,13 @@ export class EnvironmentService {
     const project = this.environmentRepository.findById(id);
 
     if (!project) {
-      ``
       throw new NotFoundException('Environment not found');
     }
 
-    return this.environmentRepository.findOneAndUpdate({ _id: id }, updateEnvironmentDto);
+    return this.environmentRepository.findOneAndUpdate(
+      { _id: id },
+      updateEnvironmentDto,
+    );
   }
 
   remove(id: string) {

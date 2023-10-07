@@ -6,26 +6,22 @@ import { AuthResponse, SignTokenPayload } from './auth.interface';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
 import { UserWithoutPassword } from '@/common/types';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { exclude } from '@/common/helpers/exclude';
-import { User } from '../user/entities/user.entity';
-Promise<AuthResponse>
+import { UserRepository } from '@/common/repository/user.repository';
+import { User } from '@/common/schemas';
+Promise<AuthResponse>;
+@Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly userRepository: UserRepository,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<AuthResponse> {
     const { email, password } = signUpDto;
 
-    const isExisted = await this.userRepository.findOne({
-      where: {
-        email,
-      },
-    });
+    const isExisted = await this.userRepository.findOne({ email });
 
     if (isExisted) {
       throw new BadRequestException('Email is already existed');
@@ -33,12 +29,12 @@ export class AuthService {
     const saltOrRounds = 7;
     const hashPassword = await bcrypt.hash(password, saltOrRounds);
 
-    const newUser = await this.userRepository.save({
+    const newUser = await this.userRepository.create({
       email,
       password: hashPassword,
     });
 
-    const userId = newUser.id;
+    const { _id: userId } = newUser;
     const payload = { userId };
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -65,7 +61,7 @@ export class AuthService {
       throw new BadRequestException('Email or password is not correct');
     }
 
-    const userId = user.id;
+    const { _id: userId } = user;
     const payload = { userId };
 
     const [accessToken, refreshToken] = await Promise.all([
