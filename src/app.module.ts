@@ -8,6 +8,7 @@ import { MulterConfigModule } from './modules/multer/multer.module';
 import { EnvironmentModule } from './modules/environment/environment.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { GoogleDriveModule } from './modules/google-drive/google-drive.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from './modules/user/user.module';
     EnvironmentModule,
     UserModule,
     AuthModule,
+    GoogleDriveModule,
   ],
 })
 export class AppModule {}

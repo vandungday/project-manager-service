@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 import tmp from 'tmpfile';
 
 export const unlink = (path: string, clean = false) => {
@@ -7,15 +7,12 @@ export const unlink = (path: string, clean = false) => {
   return new Promise((resolve, reject) => {
     fs.unlink(path, (error: any) => {
       if (error) return reject(error);
+      console.log(`File ${path} deleted!`);
 
       resolve(true);
     });
   });
 };
-
-export const createReadStream = fs.createReadStream;
-
-export const createWriteStream = fs.createWriteStream;
 
 export const createTmpPath = () => tmp();
 
